@@ -1,0 +1,25 @@
+FROM mdnetdesign/apache-php71
+
+RUN echo "<VirtualHost *:80>" > /etc/httpd/sites/default.conf
+RUN echo " ServerName localhost" >> /etc/httpd/sites/default.conf
+RUN echo " ServerAlias *" >> /etc/httpd/sites/default.conf
+RUN echo " DocumentRoot /var/www/html/web" >> /etc/httpd/sites/default.conf
+RUN echo " <Directory /var/www/html>" >> /etc/httpd/sites/default.conf
+RUN echo "  AllowOverride All" >> /etc/httpd/sites/default.conf
+RUN echo " </Directory>" >> /etc/httpd/sites/default.conf
+RUN echo "</VirtualHost>" >> /etc/httpd/sites/default.conf
+RUN chmod 555 /etc/httpd/sites/default.conf
+
+RUN curl https://getcomposer.org/installer -o /tmp/composer-installer.php
+RUN php /tmp/composer-installer.php --install-dir=/usr/local/bin --filename=composer
+RUN chmod +x /usr/local/bin/composer
+RUN rm -f /tmp/composer-installer.php 2> /dev/null
+
+RUN curl --silent --location https://rpm.nodesource.com/setup_8.x | bash -
+RUN yum -y install nodejs
+
+RUN npm install -g uglify-js less uglifycss
+RUN ln -s /usr/bin/node /usr/bin/nodejs
+RUN ln -s /usr/bin/uglifycss /usr/local/bin/uglifycss
+RUN ln -s /usr/bin/uglifyjs /usr/local/bin/uglifyjs
+RUN ln -s /usr/lib/node_modules/less /usr/local/bin/less
