@@ -1,14 +1,28 @@
 FROM mdnetdesign/apache-php71
 
-RUN echo "<VirtualHost *:80>" > /etc/httpd/sites/default.conf
-RUN echo " ServerName localhost" >> /etc/httpd/sites/default.conf
-RUN echo " ServerAlias *" >> /etc/httpd/sites/default.conf
-RUN echo " DocumentRoot /var/www/html/web" >> /etc/httpd/sites/default.conf
-RUN echo " <Directory /var/www/html>" >> /etc/httpd/sites/default.conf
-RUN echo "  AllowOverride All" >> /etc/httpd/sites/default.conf
-RUN echo " </Directory>" >> /etc/httpd/sites/default.conf
-RUN echo "</VirtualHost>" >> /etc/httpd/sites/default.conf
-RUN chmod 555 /etc/httpd/sites/default.conf
+RUN echo "<VirtualHost *:80>" > /etc/httpd/sites/http.conf
+RUN echo " ServerName localhost" >> /etc/httpd/sites/http.conf
+RUN echo " ServerAlias *" >> /etc/httpd/sites/http.conf
+RUN echo " DocumentRoot /var/www/html/web" >> /etc/httpd/sites/http.conf
+RUN echo " <Directory /var/www/html>" >> /etc/httpd/sites/http.conf
+RUN echo "  AllowOverride All" >> /etc/httpd/sites/http.conf
+RUN echo " </Directory>" >> /etc/httpd/sites/http.conf
+RUN echo "</VirtualHost>" >> /etc/httpd/sites/http.conf
+RUN chmod 444 /etc/httpd/sites/http.conf
+
+RUN echo "<VirtualHost *:443>" > /etc/httpd/sites/https.conf
+RUN echo " ServerName localhost" >> /etc/httpd/sites/https.conf
+RUN echo " ServerAlias *" >> /etc/httpd/sites/https.conf
+RUN echo " SSLEngine on" >> /etc/httpd/sites/https.conf
+RUN echo " SSLCertificateFile /var/www/cert/cert.crt" >> /etc/httpd/sites/https.conf
+RUN echo " SSLCertificateKeyFile /var/www/cert/private.key" >> /etc/httpd/sites/https.conf
+RUN echo " SSLCertificateChainFile /var/www/cert/chain.pem" >> /etc/httpd/sites/https.conf
+RUN echo " DocumentRoot /var/www/html/web" >> /etc/httpd/sites/https.conf
+RUN echo " <Directory /var/www/html>" >> /etc/httpd/sites/https.conf
+RUN echo "  AllowOverride All" >> /etc/httpd/sites/https.conf
+RUN echo " </Directory>" >> /etc/httpd/sites/https.conf
+RUN echo "</VirtualHost>" >> /etc/httpd/sites/https.conf
+RUN chmod 444 /etc/httpd/sites/https.conf
 
 RUN curl https://getcomposer.org/installer -o /tmp/composer-installer.php
 RUN php /tmp/composer-installer.php --install-dir=/usr/local/bin --filename=composer
