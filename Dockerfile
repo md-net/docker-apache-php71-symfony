@@ -3,7 +3,7 @@ FROM mdnetdesign/apache-php71
 RUN echo "<VirtualHost *:80>" > /etc/httpd/sites/http.conf
 RUN echo " ServerName localhost" >> /etc/httpd/sites/http.conf
 RUN echo " ServerAlias *" >> /etc/httpd/sites/http.conf
-RUN echo " DocumentRoot /var/www/html/web" >> /etc/httpd/sites/http.conf
+RUN echo " DocumentRoot /var/www/html/public" >> /etc/httpd/sites/http.conf
 RUN echo " <Directory /var/www/html>" >> /etc/httpd/sites/http.conf
 RUN echo "  AllowOverride All" >> /etc/httpd/sites/http.conf
 RUN echo " </Directory>" >> /etc/httpd/sites/http.conf
@@ -17,7 +17,7 @@ RUN echo " SSLEngine on" >> /etc/httpd/sites/https.conf
 RUN echo " SSLCertificateFile /var/www/cert/cert.crt" >> /etc/httpd/sites/https.conf
 RUN echo " SSLCertificateKeyFile /var/www/cert/private.key" >> /etc/httpd/sites/https.conf
 RUN echo " SSLCertificateChainFile /var/www/cert/chain.pem" >> /etc/httpd/sites/https.conf
-RUN echo " DocumentRoot /var/www/html/web" >> /etc/httpd/sites/https.conf
+RUN echo " DocumentRoot /var/www/html/public" >> /etc/httpd/sites/https.conf
 RUN echo " <Directory /var/www/html>" >> /etc/httpd/sites/https.conf
 RUN echo "  AllowOverride All" >> /etc/httpd/sites/https.conf
 RUN echo " </Directory>" >> /etc/httpd/sites/https.conf
@@ -30,10 +30,4 @@ RUN chmod +x /usr/local/bin/composer
 RUN rm -f /tmp/composer-installer.php 2> /dev/null
 
 RUN curl --silent --location https://rpm.nodesource.com/setup_8.x | bash -
-RUN yum -y install nodejs
-
-RUN npm install -g uglify-js less uglifycss
-RUN ln -s /usr/bin/node /usr/bin/nodejs
-RUN ln -s /usr/bin/uglifycss /usr/local/bin/uglifycss
-RUN ln -s /usr/bin/uglifyjs /usr/local/bin/uglifyjs
-RUN ln -s /usr/lib/node_modules/less /usr/local/bin/less
+RUN yum -y install nodejs git
